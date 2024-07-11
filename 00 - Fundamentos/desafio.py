@@ -1,9 +1,9 @@
 menu = """
 
-[d] Depositar
-[s] Sacar
-[e] Extrato
-[q] Sair
+[1] Depositar
+[2] Sacar
+[3] Extrato
+[0] Sair
 
 => """
 
@@ -22,6 +22,7 @@ while True:
 
         if valor > 0:
             saldo += valor
+            print("Depósito Realizado")
             extrato += f"Depósito: R$ {valor:.2f}\n"
 
         else:
@@ -47,6 +48,7 @@ while True:
 
         elif valor > 0:
             saldo -= valor
+            print("Saque Realizado")
             extrato += f"Saque: R$ {valor:.2f}\n"
             numero_saques += 1
 
@@ -59,7 +61,7 @@ while True:
         print(f"\nSaldo: R$ {saldo:.2f}")
         print("==========================================")
 
-    elif opcao == "q":
+    elif opcao == "4":
         break
 
     else:
