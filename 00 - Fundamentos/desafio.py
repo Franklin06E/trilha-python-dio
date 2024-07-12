@@ -1,3 +1,9 @@
+import datetime
+import pytz
+
+horario_operacao = datetime.datetime.now(pytz.timezone("America/Sao_Paulo"))
+horario_formatado = horario_operacao.strftime("%d/%m/%Y %H:%M:%S")
+
 menu = """
 
 [1] Depositar
@@ -12,57 +18,46 @@ limite = 500
 extrato = ""
 numero_saques = 0
 LIMITE_SAQUES = 3
-
+valor = 0
 while True:
 
     opcao = input(menu)
 
-    if opcao == "d":
-        valor = float(input("Informe o valor do depósito: "))
-
+    if opcao == "1":
+        valor = float(input(f"Digite o valor a ser depositado: "))
         if valor > 0:
             saldo += valor
-            print("Depósito Realizado")
-            extrato += f"Depósito: R$ {valor:.2f}\n"
+            print(f"Depósito efetuado no valor de R$ {valor:.2f}\n{horario_formatado}\n")
+            extrato += f"Depósito: R$ {valor:.2f} {horario_formatado}\n"
+            
+        else: 
+            print("Valor inválido.")
+        
+    elif opcao == "2":
+        valor = float(input(f"Digite o valor a ser sacado: "))
+        
+        if valor > saldo:
+            print("Saldo insuficiente.")
 
-        else:
-            print("Operação falhou! O valor informado é inválido.")
+        elif valor > limite:
+            print("Valor acima do limite permitido.")
 
-    elif opcao == "s":
-        valor = float(input("Informe o valor do saque: "))
+        elif numero_saques == LIMITE_SAQUES:
+            print("Número máximo de saques diários atingido.")
 
-        excedeu_saldo = valor > saldo
-
-        excedeu_limite = valor > limite
-
-        excedeu_saques = numero_saques >= LIMITE_SAQUES
-
-        if excedeu_saldo:
-            print("Operação falhou! Você não tem saldo suficiente.")
-
-        elif excedeu_limite:
-            print("Operação falhou! O valor do saque excede o limite.")
-
-        elif excedeu_saques:
-            print("Operação falhou! Número máximo de saques excedido.")
-
-        elif valor > 0:
+        elif saldo > 0:
             saldo -= valor
-            print("Saque Realizado")
-            extrato += f"Saque: R$ {valor:.2f}\n"
+            print (f"Saque de R$ {valor:.2f} realizado.\n{horario_formatado}\n")
+            extrato += f"Saque: R$ {valor:.2f} {horario_formatado}\n"
             numero_saques += 1
 
-        else:
-            print("Operação falhou! O valor informado é inválido.")
+    elif opcao == "3":
+        print("              EXTRATO               \n")
+        print(f"Não foram realizadas movimentações." if not extrato else extrato)
+        print(f"Saldo atual: R$ {saldo:.2f}")
 
-    elif opcao == "e":
-        print("\n================ EXTRATO ================")
-        print("Não foram realizadas movimentações." if not extrato else extrato)
-        print(f"\nSaldo: R$ {saldo:.2f}")
-        print("==========================================")
-
-    elif opcao == "4":
+    elif opcao == "0":
         break
 
     else:
-        print("Operação inválida, por favor selecione novamente a operação desejada.")
+        print("Operação inválida. Por favor, selecione novamente a operação desejada.")
